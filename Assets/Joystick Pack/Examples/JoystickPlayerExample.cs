@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class JoystickPlayerExample : MonoBehaviour
 {
+    [SerializeField] GameObject cam;
+
     public float speed;
     public VariableJoystick variableJoystick;
     public Rigidbody rb;
@@ -12,5 +14,6 @@ public class JoystickPlayerExample : MonoBehaviour
     {
         Vector3 direction = Vector3.forward * variableJoystick.Vertical + Vector3.right * variableJoystick.Horizontal;
         rb.AddForce(direction * speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        cam.transform.position = new Vector3(transform.position.x, cam.transform.position.y, transform.position.z);
     }
 }
