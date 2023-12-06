@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 [ExecuteInEditMode]
 public class enemyScript : MonoBehaviour
@@ -13,6 +14,7 @@ public class enemyScript : MonoBehaviour
     public Color meshColor = Color.red;
     public int scanFrequency = 30;
     public LayerMask layers;
+    public LayerMask occlusionLayers;
 
     public List<GameObject> Objects = new List<GameObject>();
     Collider[] colliders = new Collider[50];
@@ -25,7 +27,6 @@ public class enemyScript : MonoBehaviour
     void Start()
     {
         scanInterval = 1.0f / scanFrequency;
-        gun.Play();
     }
 
     // Update is called once per frame
@@ -37,6 +38,7 @@ public class enemyScript : MonoBehaviour
             scanTimer += scanInterval;
             Scan();
         }
+
     }
 
     public bool IsInSight(GameObject obj)
@@ -58,6 +60,13 @@ public class enemyScript : MonoBehaviour
             return false;
         }
 
+        origin.y += height / 2;
+        dest.y = origin.y;
+        if(Physics.Linecast(origin, dest, occlusionLayers))
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -72,7 +81,22 @@ public class enemyScript : MonoBehaviour
             if(IsInSight(obj))
             {
                 Objects.Add(obj);
+                gun.Play();
+
+                gameObject.transform.LookAt(obj.transform.position);
+                /*
+                int damping = 2;
+
+                var lookPos = obj.transform.position - transform.position;
+                lookPos.y = 0;
+                var rotation = Quaternion.LookRotation(lookPos);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);*/
             }
+        }
+
+        if(Objects.Count == 0)
+        {
+            gun.Stop();
         }
     }
 
@@ -173,9 +197,11 @@ public class enemyScript : MonoBehaviour
         {
             Gizmos.color = meshColor;
             Gizmos.DrawMesh(mesh, transform.position, transform.rotation);
+            LineRenderer line = new LineRenderer();
+            
         }
 
-        Gizmos.DrawWireSphere(transform.position, distance);
+        //Gizmos.DrawWireSphere(transform.position, distance);
         for(int i = 0; i < count; ++i)
         {
             Gizmos.DrawSphere(colliders[i].transform.position, 0.2f);

@@ -152,7 +152,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 30810288}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 7.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -730,6 +730,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3881087803549984437, guid: ec536a7718376554185e4a856d5ae230, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3881087803549984439, guid: ec536a7718376554185e4a856d5ae230, type: 3}
+      propertyPath: joystickType
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3881087803815115470, guid: ec536a7718376554185e4a856d5ae230, type: 3}
@@ -1563,6 +1567,9 @@ MonoBehaviour:
   layers:
     serializedVersion: 2
     m_Bits: 8
+  occlusionLayers:
+    serializedVersion: 2
+    m_Bits: 1
   Objects: []
 --- !u!1 &525183502
 GameObject:
@@ -2739,6 +2746,9 @@ MonoBehaviour:
   layers:
     serializedVersion: 2
     m_Bits: 8
+  occlusionLayers:
+    serializedVersion: 2
+    m_Bits: 1
   Objects: []
 --- !u!114 &1097890153 stripped
 MonoBehaviour:
@@ -3534,7 +3544,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4934111147742088, guid: 9c49b9c1648647e47be8167f82a5f87e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 24
+      value: 13.49
       objectReference: {fileID: 0}
     - target: {fileID: 4934111147742088, guid: 9c49b9c1648647e47be8167f82a5f87e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5464,6 +5474,9 @@ MonoBehaviour:
   layers:
     serializedVersion: 2
     m_Bits: 8
+  occlusionLayers:
+    serializedVersion: 2
+    m_Bits: 1
   Objects: []
 --- !u!1 &2042663376
 GameObject:
