@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -83,7 +84,10 @@ public class enemyScript : MonoBehaviour
                 Objects.Add(obj);
                 gun.Play();
 
-                gameObject.transform.LookAt(obj.transform.position);
+                Vector3 looker = obj.transform.position;
+                looker.y = gameObject.transform.position.y;
+
+                gameObject.transform.LookAt(looker);
                 /*
                 int damping = 2;
 
