@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class JoystickPlayerExample : MonoBehaviour
 {
-    [SerializeField] GameObject cam;
+    [SerializeField] public GameObject cam;
 
     public float speed;
     public VariableJoystick variableJoystick;

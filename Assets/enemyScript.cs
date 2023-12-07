@@ -9,6 +9,7 @@ using static UnityEngine.GraphicsBuffer;
 public class enemyScript : MonoBehaviour
 {
     [SerializeField] ParticleSystem gun;
+    [SerializeField] GameObject bullet;
     public float distance = 10;
     public float angle = 30;
     public float height = 1.0f;
@@ -16,6 +17,8 @@ public class enemyScript : MonoBehaviour
     public int scanFrequency = 30;
     public LayerMask layers;
     public LayerMask occlusionLayers;
+    bool seenApriori = false;
+    public int movementSpeed = 1;
 
     public List<GameObject> Objects = new List<GameObject>();
     Collider[] colliders = new Collider[50];
@@ -23,10 +26,16 @@ public class enemyScript : MonoBehaviour
     int count;
     float scanInterval;
     float scanTimer;
+    bool shootable;
+    public bool over = false;
+    bool chase;
+    float timer = 0;
 
     // Start is called before the first frame update
     void Start()
     {
+        chase = false;
+        shootable = true;
         scanInterval = 1.0f / scanFrequency;
     }
 
@@ -34,12 +43,32 @@ public class enemyScript : MonoBehaviour
     void Update()
     {
         scanTimer -= Time.deltaTime;
-        if(scanTimer < 0)
+        if(scanTimer < 0 && !over)
         {
             scanTimer += scanInterval;
             Scan();
         }
 
+        if(over)
+        {
+            gun.Stop();
+        }
+
+        timer += Time.deltaTime;
+
+        if (chase && timer < 1)
+        {
+            transform.position += transform.forward * movementSpeed * Time.deltaTime;
+            timer = 0;
+        }
+
+    }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        shootable = true;
     }
 
     public bool IsInSight(GameObject obj)
@@ -88,20 +117,44 @@ public class enemyScript : MonoBehaviour
                 looker.y = gameObject.transform.position.y;
 
                 gameObject.transform.LookAt(looker);
-                /*
-                int damping = 2;
 
-                var lookPos = obj.transform.position - transform.position;
-                lookPos.y = 0;
-                var rotation = Quaternion.LookRotation(lookPos);
-                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);*/
+                if(shootable)
+                {
+                    seenApriori = true;
+                    StartCoroutine(Wait());
+                    Shoot(obj);
+                }
             }
         }
 
         if(Objects.Count == 0)
         {
             gun.Stop();
+
+            if(seenApriori)
+            {
+                //StartCoroutine(Chase());
+                chase = true;
+                seenApriori = false;
+            }
         }
+    }
+
+
+    /*IEnumerator Chase()
+    {
+        chase = true;
+        yield return new WaitForSeconds(2f);
+        chase = false;
+    }*/
+
+    private void Shoot(GameObject obj)
+    {
+        GameObject created = Instantiate(bullet, transform.position, Quaternion.identity);
+
+        created.GetComponent<bullet>().Shoot(obj, gameObject);
+
+        shootable = false;
     }
 
     Mesh CreateWedgeMesh()
