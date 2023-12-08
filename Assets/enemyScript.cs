@@ -148,19 +148,21 @@ public class enemyScript : MonoBehaviour
     }
     IEnumerator SomeCoroutine()
     {
+        yield return new WaitForSeconds(1f);
         seenApriori = false;
-        //Declare a yield instruction.
-        WaitForSeconds wait = new WaitForSeconds(0.5f);
 
-        for (int i = 0; i < 10; i++)
+        //Declare a yield instruction.
+        WaitForSeconds wait = new WaitForSeconds(0.00000002f);
+
+        for (int i = 0; i < 200; i++)
         {
-            transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 10000f);
+            transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 5f);
             yield return wait;
         }
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 300; i++)
         {
-            transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 10000f);
+            transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 5f);
             yield return wait;
         }
 
