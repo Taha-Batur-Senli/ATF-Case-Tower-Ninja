@@ -18,7 +18,7 @@ public class enemyScript : MonoBehaviour
     public LayerMask layers;
     public LayerMask occlusionLayers;
     bool seenApriori = false;
-    public int movementSpeed = 1;
+    public float movementSpeed = 0.8f;
 
     public List<GameObject> Objects = new List<GameObject>();
     Collider[] colliders = new Collider[50];
@@ -28,13 +28,10 @@ public class enemyScript : MonoBehaviour
     float scanTimer;
     bool shootable;
     public bool over = false;
-    bool chase;
-    float timer = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        chase = false;
         shootable = true;
         scanInterval = 1.0f / scanFrequency;
     }
@@ -54,14 +51,26 @@ public class enemyScript : MonoBehaviour
             gun.Stop();
         }
 
-        timer += Time.deltaTime;
-
-        if (chase && timer < 1)
+        if(seenApriori)
         {
-            transform.position += transform.forward * movementSpeed * Time.deltaTime;
-            timer = 0;
+            StartCoroutine(Chase());
         }
 
+    }
+
+    IEnumerator Chase()
+    {
+        float time = 0;
+
+        do
+        {
+            transform.position += transform.forward * movementSpeed * Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+
+            time += Time.deltaTime;
+        } while (time < 0.02f);
+
+        time = 0.0f;
     }
 
     IEnumerator Wait()
@@ -133,20 +142,65 @@ public class enemyScript : MonoBehaviour
 
             if(seenApriori)
             {
-                //StartCoroutine(Chase());
-                chase = true;
-                seenApriori = false;
+                StartCoroutine(SomeCoroutine());
             }
         }
     }
-
-
-    /*IEnumerator Chase()
+    IEnumerator SomeCoroutine()
     {
-        chase = true;
-        yield return new WaitForSeconds(2f);
-        chase = false;
-    }*/
+        seenApriori = false;
+        //Declare a yield instruction.
+        WaitForSeconds wait = new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < 10; i++)
+        {
+            transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 10000f);
+            yield return wait;
+        }
+
+        for (int i = 0; i < 20; i++)
+        {
+            transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 10000f);
+            yield return wait;
+        }
+
+    }
+
+    IEnumerator Forget()
+    {
+        seenApriori = false;
+
+        float time = 0;
+
+        yield return new WaitForSeconds(1.5f);
+
+        while (time < 0.2f)
+        {
+            Debug.Log(time);
+
+            transform.rotation *= Quaternion.Euler(Vector3.up * 0.5f);
+            yield return new WaitForEndOfFrame();
+
+            time += Time.deltaTime;
+        }
+    }
+    IEnumerator Forget2()
+    {
+        yield return new WaitForSeconds(1f);
+
+        float time = 0;
+
+        while (time < 0.4f)
+        {
+
+            transform.rotation *= Quaternion.Euler(Vector3.down * 0.5f);
+            yield return new WaitForEndOfFrame();
+
+            time += Time.deltaTime;
+        }
+
+        yield return new WaitForSeconds(1f);
+    }
 
     private void Shoot(GameObject obj)
     {
