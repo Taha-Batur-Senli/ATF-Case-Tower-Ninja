@@ -19,6 +19,9 @@ public class enemyScript : MonoBehaviour
     public LayerMask occlusionLayers;
     bool seenApriori = false;
     public float movementSpeed = 0.8f;
+    public float returnSpeed = 100f;
+    Vector3 ogPos;
+    Quaternion ogRot;
 
     public List<GameObject> Objects = new List<GameObject>();
     Collider[] colliders = new Collider[50];
@@ -28,10 +31,13 @@ public class enemyScript : MonoBehaviour
     float scanTimer;
     bool shootable;
     public bool over = false;
+    bool back = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        ogPos = gameObject.transform.position;
+        ogRot = gameObject.transform.rotation;
         shootable = true;
         scanInterval = 1.0f / scanFrequency;
     }
@@ -54,6 +60,45 @@ public class enemyScript : MonoBehaviour
         if(seenApriori)
         {
             StartCoroutine(Chase());
+        }
+
+        if (back && gameObject.transform.position == ogPos)
+        {
+            back = false;
+            StartCoroutine(returnToRot());
+        }
+
+        if (back)
+        {
+            var lookPos = ogPos - transform.position;
+            lookPos.y = 0;
+            var rotation = Quaternion.LookRotation(lookPos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime);
+
+
+            transform.position = Vector3.MoveTowards(transform.position, ogPos, returnSpeed * Time.deltaTime);
+        }
+    }
+
+    IEnumerator returnToRot()
+    {
+        seenApriori = false;
+
+        //Declare a yield instruction.
+        WaitForSeconds wait = new WaitForSeconds(0.00000002f);
+
+        while(transform.rotation.y != ogRot.y)
+        {
+            if(transform.rotation.y > 180)
+            {
+                transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 100f);
+                yield return wait;
+            }
+            else
+            {
+                transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 100f);
+                yield return wait;
+            }
         }
 
     }
@@ -142,11 +187,12 @@ public class enemyScript : MonoBehaviour
 
             if(seenApriori)
             {
-                StartCoroutine(SomeCoroutine());
+                StartCoroutine(Forget());
             }
         }
     }
-    IEnumerator SomeCoroutine()
+
+    IEnumerator Forget()
     {
         yield return new WaitForSeconds(1f);
         seenApriori = false;
@@ -160,48 +206,14 @@ public class enemyScript : MonoBehaviour
             yield return wait;
         }
 
-        for (int i = 0; i < 300; i++)
+        for (int i = 0; i < 400; i++)
         {
             transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 5f);
             yield return wait;
         }
 
-    }
-
-    IEnumerator Forget()
-    {
-        seenApriori = false;
-
-        float time = 0;
-
-        yield return new WaitForSeconds(1.5f);
-
-        while (time < 0.2f)
-        {
-            Debug.Log(time);
-
-            transform.rotation *= Quaternion.Euler(Vector3.up * 0.5f);
-            yield return new WaitForEndOfFrame();
-
-            time += Time.deltaTime;
-        }
-    }
-    IEnumerator Forget2()
-    {
         yield return new WaitForSeconds(1f);
-
-        float time = 0;
-
-        while (time < 0.4f)
-        {
-
-            transform.rotation *= Quaternion.Euler(Vector3.down * 0.5f);
-            yield return new WaitForEndOfFrame();
-
-            time += Time.deltaTime;
-        }
-
-        yield return new WaitForSeconds(1f);
+        back = true;
     }
 
     private void Shoot(GameObject obj)

@@ -10248,7 +10248,10 @@ MonoBehaviour:
   occlusionLayers:
     serializedVersion: 2
     m_Bits: 1
+  movementSpeed: 0.8
+  returnSpeed: 6
   Objects: []
+  over: 0
 --- !u!1 &2926912907531881095
 GameObject:
   m_ObjectHideFlags: 0
