@@ -5,11 +5,13 @@ using UnityEditor;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class enemyScript : MonoBehaviour
 {
     [SerializeField] ParticleSystem gun;
     [SerializeField] GameObject bullet;
+    [SerializeField] public int rotLeftAngle = 150;
+    [SerializeField] public int rotRightAngle = 210;
     public float distance = 10;
     public float angle = 30;
     public float height = 1.0f;
@@ -22,6 +24,9 @@ public class enemyScript : MonoBehaviour
     public float returnSpeed = 100f;
     Vector3 ogPos;
     Vector3 ogRot;
+    bool left = false;
+    bool right = false;
+    int cnt = 0;
 
     public List<GameObject> Objects = new List<GameObject>();
     Collider[] colliders = new Collider[50];
@@ -67,6 +72,10 @@ public class enemyScript : MonoBehaviour
             back = false;
             StartCoroutine(returnToRot());
         }
+        else if (gameObject.transform.position == ogPos)
+        {
+            StartCoroutine(Look());
+        }
 
         if (back)
         {
@@ -78,6 +87,53 @@ public class enemyScript : MonoBehaviour
 
             transform.position = Vector3.MoveTowards(transform.position, ogPos, returnSpeed * Time.deltaTime);
         }
+    }
+
+    IEnumerator Look()
+    {
+
+        //Declare a yield instruction.
+        WaitForSeconds wait = new WaitForSeconds(0.5f);
+        
+        if(cnt < 3)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            while (transform.rotation.eulerAngles.y > rotLeftAngle && !left)
+            {
+                transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 100f);
+                yield return wait;
+            }
+            left = true;
+
+            yield return new WaitForSeconds(2f);
+
+            while (transform.rotation.eulerAngles.y < rotRightAngle && !right)
+            {
+                transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 100f);
+                yield return wait;
+            }
+            right = true;
+        }
+
+        if(left && right)
+        {
+            cnt++;
+            left = false;
+            right = false;
+        }
+
+        if(cnt == 3)
+        {
+            while (transform.rotation.eulerAngles.y != -transform.rotation.eulerAngles.y)
+            {
+                transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 100f);
+                yield return wait;
+            }
+
+            cnt = 0;
+        }
+
     }
 
     IEnumerator returnToRot()
