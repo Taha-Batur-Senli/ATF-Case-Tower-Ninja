@@ -839,7 +839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
-  speed: 20
+  speed: 15
   variableJoystick: {fileID: 0}
   rb: {fileID: 3364896701650945315}
   direction: {x: 0, y: 0, z: 0}

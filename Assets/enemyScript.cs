@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
@@ -10,8 +11,10 @@ public class enemyScript : MonoBehaviour
 {
     [SerializeField] ParticleSystem gun;
     [SerializeField] GameObject bullet;
-    [SerializeField] public int rotLeftAngle = 150;
-    [SerializeField] public int rotRightAngle = 210;
+    [SerializeField] public int rotRightAngle = 150;
+    [SerializeField] public int rotLeftAngle = 210;
+    float leftPoint;
+    float rightPoint;
     public float distance = 10;
     public float angle = 30;
     public float height = 1.0f;
@@ -27,6 +30,7 @@ public class enemyScript : MonoBehaviour
     bool left = false;
     bool right = false;
     int cnt = 0;
+    bool add = false;
 
     public List<GameObject> Objects = new List<GameObject>();
     Collider[] colliders = new Collider[50];
@@ -50,6 +54,22 @@ public class enemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(cnt < 3)
+        {
+            StartCoroutine(Look());
+        }
+        else
+        {
+            StartCoroutine(turn());
+        }
+
+        if(add && cnt < 3)
+        {
+            add = false;
+            cnt++;
+            Debug.Log(cnt);
+        }
+
         scanTimer -= Time.deltaTime;
         if(scanTimer < 0 && !over)
         {
@@ -72,10 +92,6 @@ public class enemyScript : MonoBehaviour
             back = false;
             StartCoroutine(returnToRot());
         }
-        else if (gameObject.transform.position == ogPos)
-        {
-            StartCoroutine(Look());
-        }
 
         if (back)
         {
@@ -89,51 +105,65 @@ public class enemyScript : MonoBehaviour
         }
     }
 
-    IEnumerator Look()
+    IEnumerator turn()
     {
+        yield return new WaitForSeconds(1f);
 
         //Declare a yield instruction.
-        WaitForSeconds wait = new WaitForSeconds(0.5f);
-        
-        if(cnt < 3)
+        WaitForSeconds wait = new WaitForSeconds(0.2f);
+
+        Debug.Log(ogRot.y - 180);
+        Debug.Log(transform.rotation.eulerAngles.y);
+
+        //first debug gives 0, second one gives 210 something, turns without stopping now
+
+        while (transform.rotation.eulerAngles.y > ogRot.y - 180)
         {
-            yield return new WaitForSeconds(0.5f);
-
-            while (transform.rotation.eulerAngles.y > rotLeftAngle && !left)
-            {
-                transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 100f);
-                yield return wait;
-            }
-            left = true;
-
-            yield return new WaitForSeconds(2f);
-
-            while (transform.rotation.eulerAngles.y < rotRightAngle && !right)
-            {
-                transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 100f);
-                yield return wait;
-            }
-            right = true;
+            transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 8f);
+            yield return wait;
         }
 
+        yield return new WaitForSeconds(1f);
+    }
+
+    IEnumerator Look()
+    {
         if(left && right)
         {
-            cnt++;
             left = false;
             right = false;
         }
-
-        if(cnt == 3)
+        else
         {
-            while (transform.rotation.eulerAngles.y != -transform.rotation.eulerAngles.y)
+            yield return new WaitForSeconds(1f);
+
+            //Declare a yield instruction.
+            WaitForSeconds wait = new WaitForSeconds(0.2f);
+
+            while (transform.rotation.eulerAngles.y < rotLeftAngle && !left)
             {
-                transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 100f);
+                transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 8f);
                 yield return wait;
             }
 
-            cnt = 0;
-        }
+            left = true;
+            yield return new WaitForSeconds(1f);
 
+            while (transform.rotation.eulerAngles.y > rotRightAngle && !right)
+            {
+                transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 4f);
+                yield return wait;
+            }
+            yield return new WaitForSeconds(1f);
+
+            right = true;
+
+
+            if ((int)transform.rotation.eulerAngles.y == rotRightAngle - 1)
+            {
+                add = true;
+            }
+        }
     }
 
     IEnumerator returnToRot()
@@ -142,7 +172,6 @@ public class enemyScript : MonoBehaviour
 
         //Declare a yield instruction.
         WaitForSeconds wait = new WaitForSeconds(0.00000002f);
-
 
         while(transform.rotation.eulerAngles.y != ogRot.y)
         {
@@ -244,6 +273,8 @@ public class enemyScript : MonoBehaviour
 
             if(seenApriori)
             {
+                leftPoint = transform.rotation.eulerAngles.y + 30;
+                rightPoint = transform.rotation.eulerAngles.y - 30;
                 StartCoroutine(Forget());
             }
         }
@@ -257,19 +288,22 @@ public class enemyScript : MonoBehaviour
         //Declare a yield instruction.
         WaitForSeconds wait = new WaitForSeconds(0.00000002f);
 
-        for (int i = 0; i < 200; i++)
+        while(transform.rotation.eulerAngles.y < leftPoint)
         {
             transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 5f);
             yield return wait;
         }
 
-        for (int i = 0; i < 400; i++)
+        yield return new WaitForSeconds(1f);
+
+        while (transform.rotation.eulerAngles.y > rightPoint)
         {
             transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 5f);
             yield return wait;
         }
 
         yield return new WaitForSeconds(1f);
+
         back = true;
     }
 
