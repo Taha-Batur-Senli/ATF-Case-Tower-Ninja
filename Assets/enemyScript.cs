@@ -18,10 +18,10 @@ public class enemyScript : MonoBehaviour
     public LayerMask layers;
     public LayerMask occlusionLayers;
     bool seenApriori = false;
-    public float movementSpeed = 0.8f;
+    public float movementSpeed = 0.5f;
     public float returnSpeed = 100f;
     Vector3 ogPos;
-    Quaternion ogRot;
+    Vector3 ogRot;
 
     public List<GameObject> Objects = new List<GameObject>();
     Collider[] colliders = new Collider[50];
@@ -37,7 +37,7 @@ public class enemyScript : MonoBehaviour
     void Start()
     {
         ogPos = gameObject.transform.position;
-        ogRot = gameObject.transform.rotation;
+        ogRot = gameObject.transform.rotation.eulerAngles;
         shootable = true;
         scanInterval = 1.0f / scanFrequency;
     }
@@ -87,9 +87,10 @@ public class enemyScript : MonoBehaviour
         //Declare a yield instruction.
         WaitForSeconds wait = new WaitForSeconds(0.00000002f);
 
-        while(transform.rotation.y != ogRot.y)
+
+        while(transform.rotation.eulerAngles.y != ogRot.y)
         {
-            if(transform.rotation.y > 180)
+            if(transform.rotation.eulerAngles.y > 180)
             {
                 transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 100f);
                 yield return wait;

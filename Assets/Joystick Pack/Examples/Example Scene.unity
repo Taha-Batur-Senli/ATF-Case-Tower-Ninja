@@ -1784,6 +1784,10 @@ PrefabInstance:
       propertyPath: returnSpeed
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2925301235768350128, guid: 047dc21922ef4744499cc4f8a69e4414, type: 3}
+      propertyPath: movementSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2926809235937712375, guid: 047dc21922ef4744499cc4f8a69e4414, type: 3}
       propertyPath: m_Name
       value: MachineGunRobot (2)
@@ -2923,6 +2927,10 @@ PrefabInstance:
     - target: {fileID: 2925301235768350128, guid: 047dc21922ef4744499cc4f8a69e4414, type: 3}
       propertyPath: returnSpeed
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2925301235768350128, guid: 047dc21922ef4744499cc4f8a69e4414, type: 3}
+      propertyPath: movementSpeed
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2926809235937712375, guid: 047dc21922ef4744499cc4f8a69e4414, type: 3}
       propertyPath: m_Name
@@ -5755,6 +5763,10 @@ PrefabInstance:
     - target: {fileID: 2925301235768350128, guid: 047dc21922ef4744499cc4f8a69e4414, type: 3}
       propertyPath: returnSpeed
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2925301235768350128, guid: 047dc21922ef4744499cc4f8a69e4414, type: 3}
+      propertyPath: movementSpeed
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2926809235937712375, guid: 047dc21922ef4744499cc4f8a69e4414, type: 3}
       propertyPath: m_Name
