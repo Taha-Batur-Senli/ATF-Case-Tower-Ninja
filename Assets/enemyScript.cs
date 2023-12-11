@@ -112,18 +112,20 @@ public class enemyScript : MonoBehaviour
         //Declare a yield instruction.
         WaitForSeconds wait = new WaitForSeconds(0.2f);
 
-        Debug.Log(ogRot.y - 180);
-        Debug.Log(transform.rotation.eulerAngles.y);
-
         //first debug gives 0, second one gives 210 something, turns without stopping now
 
-        while (transform.rotation.eulerAngles.y > ogRot.y - 180)
+        //Look around works now, but the look function calls itself for the front, add a bool inside for back and forth
+        //same goes for the turn, make it turn back as well after going forward
+
+        while ((int) transform.rotation.eulerAngles.y > ogRot.y - 180)
         {
-            transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 8f);
+            transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 8f);
             yield return wait;
         }
 
         yield return new WaitForSeconds(1f);
+
+        cnt = 0;
     }
 
     IEnumerator Look()
