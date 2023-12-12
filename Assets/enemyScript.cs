@@ -31,6 +31,7 @@ public class enemyScript : MonoBehaviour
     bool right = false;
     int cnt = 0;
     bool add = false;
+    int ss = 0;
 
     public List<GameObject> Objects = new List<GameObject>();
     Collider[] colliders = new Collider[50];
@@ -54,6 +55,12 @@ public class enemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(cnt == 3)
+        {
+            cnt++;
+            ss++;
+        }
+
         if(cnt < 3)
         {
             StartCoroutine(Look());
@@ -67,7 +74,6 @@ public class enemyScript : MonoBehaviour
         {
             add = false;
             cnt++;
-            Debug.Log(cnt);
         }
 
         scanTimer -= Time.deltaTime;
@@ -100,7 +106,6 @@ public class enemyScript : MonoBehaviour
             var rotation = Quaternion.LookRotation(lookPos);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime);
 
-
             transform.position = Vector3.MoveTowards(transform.position, ogPos, returnSpeed * Time.deltaTime);
         }
     }
@@ -117,9 +122,16 @@ public class enemyScript : MonoBehaviour
         //Look around works now, but the look function calls itself for the front, add a bool inside for back and forth
         //same goes for the turn, make it turn back as well after going forward
 
-        while ((int) transform.rotation.eulerAngles.y > ogRot.y - 180)
+        while ((int)transform.rotation.eulerAngles.y > Math.Abs(ogRot.y - (180 * (ss % 2))))
         {
-            transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 8f);
+            if(ss % 2 == 1)
+            {
+                transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 8f);
+            }
+            else
+            {
+                transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 8f);
+            }
             yield return wait;
         }
 
@@ -137,12 +149,23 @@ public class enemyScript : MonoBehaviour
         }
         else
         {
+            if (ss % 2 == 1)
+            {
+                rotRightAngle = 330;
+                rotLeftAngle = 30;
+            }
+            else
+            {
+                rotRightAngle = 150;
+                rotLeftAngle = 210;
+            }
+
             yield return new WaitForSeconds(1f);
 
             //Declare a yield instruction.
             WaitForSeconds wait = new WaitForSeconds(0.2f);
 
-            while (transform.rotation.eulerAngles.y < rotLeftAngle && !left)
+            while ((int)transform.rotation.eulerAngles.y != rotLeftAngle && !left)
             {
                 transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 8f);
                 yield return wait;
@@ -151,7 +174,7 @@ public class enemyScript : MonoBehaviour
             left = true;
             yield return new WaitForSeconds(1f);
 
-            while (transform.rotation.eulerAngles.y > rotRightAngle && !right)
+            while ((int)transform.rotation.eulerAngles.y != rotRightAngle && !right)
             {
                 transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 4f);
                 yield return wait;
@@ -161,10 +184,11 @@ public class enemyScript : MonoBehaviour
             right = true;
 
 
-            if ((int)transform.rotation.eulerAngles.y == rotRightAngle - 1)
+            if ((int)transform.rotation.eulerAngles.y == rotRightAngle )
             {
                 add = true;
             }
+
         }
     }
 
