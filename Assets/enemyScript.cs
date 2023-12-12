@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -11,8 +12,10 @@ public class enemyScript : MonoBehaviour
 {
     [SerializeField] ParticleSystem gun;
     [SerializeField] GameObject bullet;
+    [SerializeField] VisionCone cone;
     [SerializeField] public int rotRightAngle = 150;
     [SerializeField] public int rotLeftAngle = 210;
+    [SerializeField] public TextMeshProUGUI textUI;
     float leftPoint;
     float rightPoint;
     public float distance = 10;
@@ -47,6 +50,7 @@ public class enemyScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        textUI.text = "";
         ogPos = gameObject.transform.position;
         ogRot = gameObject.transform.rotation.eulerAngles;
         shootable = true;
@@ -226,6 +230,7 @@ public class enemyScript : MonoBehaviour
         }
 
         returned = true;
+        textUI.text = "";
     }
 
     IEnumerator Chase()
@@ -295,9 +300,11 @@ public class enemyScript : MonoBehaviour
                 Vector3 looker = obj.transform.position;
                 looker.y = gameObject.transform.position.y;
 
+                textUI.text = "!";
                 gameObject.transform.LookAt(looker);
+                cone.transform.GetComponent<MeshRenderer>().material = cone.VisionConeMaterialSighted;
 
-                if(shootable)
+                if (shootable)
                 {
                     seenApriori = true;
                     returned = false;
@@ -310,9 +317,11 @@ public class enemyScript : MonoBehaviour
         if(Objects.Count == 0)
         {
             gun.Stop();
+            cone.transform.GetComponent<MeshRenderer>().material = cone.VisionConeMaterial;
 
-            if(seenApriori)
+            if (seenApriori)
             {
+                textUI.text = "?";
                 leftPoint = transform.rotation.eulerAngles.y + 30;
                 rightPoint = transform.rotation.eulerAngles.y - 30;
                 StartCoroutine(Forget());

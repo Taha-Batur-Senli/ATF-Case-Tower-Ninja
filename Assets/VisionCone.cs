@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 public class VisionCone : MonoBehaviour
 {
     public Material VisionConeMaterial;
+    public Material VisionConeMaterialSighted;
     public float VisionRange;
     public float VisionAngle;
     public LayerMask VisionObstructingLayer;//layer with objects that obstruct the enemy view, like walls, for example
