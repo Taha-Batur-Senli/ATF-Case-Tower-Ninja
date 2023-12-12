@@ -126,11 +126,11 @@ public class enemyScript : MonoBehaviour
         {
             if(ss % 2 == 1)
             {
-                transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 8f);
+                transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 8f);
             }
             else
             {
-                transform.rotation *= Quaternion.Euler(Vector3.down * Time.deltaTime * 8f);
+                transform.rotation *= Quaternion.Euler(Vector3.up * Time.deltaTime * 8f);
             }
             yield return wait;
         }
@@ -184,7 +184,7 @@ public class enemyScript : MonoBehaviour
             right = true;
 
 
-            if ((int)transform.rotation.eulerAngles.y == rotRightAngle )
+            if ((int)transform.rotation.eulerAngles.y == rotLeftAngle )
             {
                 add = true;
             }
