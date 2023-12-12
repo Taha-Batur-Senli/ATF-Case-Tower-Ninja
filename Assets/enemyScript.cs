@@ -32,6 +32,7 @@ public class enemyScript : MonoBehaviour
     int cnt = 0;
     bool add = false;
     int ss = 0;
+    bool returned = true;
 
     public List<GameObject> Objects = new List<GameObject>();
     Collider[] colliders = new Collider[50];
@@ -55,58 +56,69 @@ public class enemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(cnt == 3)
-        {
-            cnt++;
-            ss++;
-        }
-
-        if(cnt < 3)
-        {
-            StartCoroutine(Look());
-        }
-        else
-        {
-            StartCoroutine(turn());
-        }
-
-        if(add && cnt < 3)
-        {
-            add = false;
-            cnt++;
-        }
-
         scanTimer -= Time.deltaTime;
-        if(scanTimer < 0 && !over)
+        if (scanTimer < 0 && !over)
         {
             scanTimer += scanInterval;
             Scan();
         }
 
-        if(over)
+        if (returned)
         {
-            gun.Stop();
+            if (cnt == 3)
+            {
+                cnt++;
+                ss++;
+            }
+
+            if (cnt < 3)
+            {
+                StartCoroutine(Look());
+            }
+            else
+            {
+                StartCoroutine(turn());
+            }
+
+            if (add && cnt < 3)
+            {
+                add = false;
+                cnt++;
+            }
         }
-
-        if(seenApriori)
+        else
         {
-            StartCoroutine(Chase());
-        }
+            left = false;
+            right = false;
+            cnt = 0;
+            add = false;
+            ss = 0;
 
-        if (back && gameObject.transform.position == ogPos)
-        {
-            back = false;
-            StartCoroutine(returnToRot());
-        }
+            if (over)
+            {
+                gun.Stop();
+            }
 
-        if (back)
-        {
-            var lookPos = ogPos - transform.position;
-            lookPos.y = 0;
-            var rotation = Quaternion.LookRotation(lookPos);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime);
+            if (seenApriori)
+            {
+                StartCoroutine(Chase());
+            }
 
-            transform.position = Vector3.MoveTowards(transform.position, ogPos, returnSpeed * Time.deltaTime);
+            if (back && gameObject.transform.position == ogPos)
+            {
+                back = false;
+                StartCoroutine(returnToRot());
+            }
+
+            if (back)
+            {
+                var lookPos = ogPos - transform.position;
+                lookPos.y = 0;
+                var rotation = Quaternion.LookRotation(lookPos);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime);
+
+                transform.position = Vector3.MoveTowards(transform.position, ogPos, returnSpeed * Time.deltaTime);
+            }
         }
     }
 
@@ -199,7 +211,7 @@ public class enemyScript : MonoBehaviour
         //Declare a yield instruction.
         WaitForSeconds wait = new WaitForSeconds(0.00000002f);
 
-        while(transform.rotation.eulerAngles.y != ogRot.y)
+        while((int) transform.rotation.eulerAngles.y != ogRot.y)
         {
             if(transform.rotation.eulerAngles.y > 180)
             {
@@ -213,6 +225,7 @@ public class enemyScript : MonoBehaviour
             }
         }
 
+        returned = true;
     }
 
     IEnumerator Chase()
@@ -287,6 +300,7 @@ public class enemyScript : MonoBehaviour
                 if(shootable)
                 {
                     seenApriori = true;
+                    returned = false;
                     StartCoroutine(Wait());
                     Shoot(obj);
                 }
