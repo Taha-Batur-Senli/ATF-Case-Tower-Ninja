@@ -49,7 +49,7 @@ public class gameManager : MonoBehaviour
         }
     }
 
-    public void createEnemies()
+    public void createEnemies(Vector3 loc)
     {
         
     }

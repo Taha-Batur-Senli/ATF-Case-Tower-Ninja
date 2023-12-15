@@ -10322,6 +10322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gun: {fileID: 989397000771875824}
   bullet: {fileID: 4915985715099220478, guid: a007cb7efb552b241af0c2babe5f1004, type: 3}
+  prefab: {fileID: 1081544641636860412}
   cone: {fileID: 1082191676927546463}
   rotRightAngle: 150
   rotLeftAngle: 210
