@@ -154,7 +154,10 @@ public class enemyScript : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        cnt = 0;
+        if(transform.rotation.eulerAngles.y < 181 && transform.rotation.eulerAngles.y > 179)
+        {
+            cnt = 0;
+        }
     }
 
     IEnumerator Look()
