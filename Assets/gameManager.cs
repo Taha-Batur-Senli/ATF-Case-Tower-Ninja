@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
@@ -10,12 +11,14 @@ public class gameManager : MonoBehaviour
     [SerializeField] GameObject cam;
     [SerializeField] GameObject plSpawn;
     [SerializeField] GameObject over;
+    [SerializeField] GameObject win;
     [SerializeField] GameObject joystick;
     [SerializeField] GameObject enemySpawn;
 
     // Start is called before the first frame update
     void Start()
     {
+        win.SetActive(false);
         gameObject.SetActive(true);
         over.SetActive(false);
         GameObject pl = Instantiate(player);
@@ -30,7 +33,12 @@ public class gameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(enemySpawn.transform.childCount == 0)
+        {
+            win.SetActive(true);
+            joystick.SetActive(false);
+            player.GetComponent<SimpleSampleCharacterControl>().ss.direction = Vector3.zero;
+        }
     }
 
     public void restart()

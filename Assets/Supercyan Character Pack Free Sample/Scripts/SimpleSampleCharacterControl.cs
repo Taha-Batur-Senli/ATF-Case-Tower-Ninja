@@ -18,7 +18,7 @@ public class SimpleSampleCharacterControl : MonoBehaviour
     [SerializeField] private float m_moveSpeed = 15;
     [SerializeField] private float m_turnSpeed = 200;
     [SerializeField] private float m_jumpForce = 4;
-    [SerializeField] JoystickPlayerExample ss;
+    [SerializeField] public JoystickPlayerExample ss;
 
     [SerializeField] private Animator m_animator = null;
     [SerializeField] private Rigidbody m_rigidBody = null;
