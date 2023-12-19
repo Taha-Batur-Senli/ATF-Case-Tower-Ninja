@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -13,11 +14,13 @@ public class gameManager : MonoBehaviour
     [SerializeField] GameObject over;
     [SerializeField] GameObject win;
     [SerializeField] GameObject joystick;
-    [SerializeField] GameObject enemySpawn;
+    [SerializeField] public GameObject enemySpawn;
+    [SerializeField] public TextMeshProUGUI enemyText;
 
     // Start is called before the first frame update
     void Start()
     {
+        enemyText.text = "x" + enemySpawn.transform.childCount;
         win.SetActive(false);
         gameObject.SetActive(true);
         over.SetActive(false);
