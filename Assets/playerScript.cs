@@ -30,4 +30,5 @@ public class playerScript : MonoBehaviour
             manager.endGame();
         }
     }
+
 }

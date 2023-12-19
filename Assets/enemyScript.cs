@@ -70,13 +70,15 @@ public class enemyScript : MonoBehaviour
 
         if (returned)
         {
+            StopCoroutine(Chase());
+            StopCoroutine(returnToRot());
             if (cnt == 3)
             {
                 cnt++;
                 ss++;
             }
 
-            if (cnt < 3)
+            if (cnt < 3 && cnt >= 0)
             {
                 StartCoroutine(Look());
             }
@@ -93,9 +95,11 @@ public class enemyScript : MonoBehaviour
         }
         else
         {
+            StopCoroutine(Look());
+            StopCoroutine(turn());
             left = false;
             right = false;
-            cnt = 0;
+            cnt = -1;
             add = false;
             ss = 0;
 
@@ -154,10 +158,7 @@ public class enemyScript : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        if(transform.rotation.eulerAngles.y < 181 && transform.rotation.eulerAngles.y > 179)
-        {
-            cnt = 0;
-        }
+        cnt = 0;
     }
 
     IEnumerator Look()
@@ -235,6 +236,7 @@ public class enemyScript : MonoBehaviour
         textUI.text = "";
         seenApriori = false;
         Objects.Clear();
+        cnt++;
     }
 
     IEnumerator Chase()

@@ -10196,6 +10196,8 @@ GameObject:
   - component: {fileID: 1084032567862389630}
   - component: {fileID: 1113383713557508190}
   - component: {fileID: 1105346051039464056}
+  - component: {fileID: 7335908151813333670}
+  - component: {fileID: 316060992414903572}
   m_Layer: 0
   m_Name: MachineGunRobot_Base
   m_TagString: Untagged
@@ -10271,6 +10273,31 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7335908151813333670
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081537563291358056}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.8172092, y: 2.2924945, z: 2.1503851}
+  m_Center: {x: -0.0035241859, y: 0.106580146, z: 0.050192703}
+--- !u!114 &316060992414903572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081537563291358056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4820620d0d099b741916ff340d42681f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1081544641636860412
 GameObject:
   m_ObjectHideFlags: 0
@@ -10322,7 +10349,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gun: {fileID: 989397000771875824}
   bullet: {fileID: 4915985715099220478, guid: a007cb7efb552b241af0c2babe5f1004, type: 3}
-  prefab: {fileID: 1081544641636860412}
   cone: {fileID: 1082191676927546463}
   rotRightAngle: 150
   rotLeftAngle: 210
