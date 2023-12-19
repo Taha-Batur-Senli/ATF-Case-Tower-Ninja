@@ -13,7 +13,6 @@ public class enemyScript : MonoBehaviour
 {
     [SerializeField] ParticleSystem gun;
     [SerializeField] GameObject bullet;
-    [SerializeField] GameObject prefab;
     [SerializeField] VisionCone cone;
     [SerializeField] public int rotRightAngle = 150;
     [SerializeField] public int rotLeftAngle = 210;
@@ -233,10 +232,6 @@ public class enemyScript : MonoBehaviour
 
         returned = true;
         textUI.text = "";
-        GameObject s = Instantiate(prefab);
-        s.transform.parent = transform.parent;
-        s.transform.position = ogPos;
-        Destroy(gameObject);
     }
 
     IEnumerator Chase()
