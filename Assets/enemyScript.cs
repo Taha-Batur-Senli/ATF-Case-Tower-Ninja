@@ -214,8 +214,6 @@ public class enemyScript : MonoBehaviour
 
     IEnumerator returnToRot()
     {
-        seenApriori = false;
-
         //Declare a yield instruction.
         WaitForSeconds wait = new WaitForSeconds(0.00000002f);
 
@@ -235,6 +233,8 @@ public class enemyScript : MonoBehaviour
 
         returned = true;
         textUI.text = "";
+        seenApriori = false;
+        Objects.Clear();
     }
 
     IEnumerator Chase()
@@ -291,7 +291,7 @@ public class enemyScript : MonoBehaviour
     private void Scan()
     {
         count = Physics.OverlapSphereNonAlloc(transform.position, distance, colliders, layers, QueryTriggerInteraction.Collide);
-
+        
         Objects.Clear();
         for(int i = 0; i < count; ++i)
         {
