@@ -32,7 +32,6 @@ public class gameManager : MonoBehaviour
         playerData = new PlayerData();
         saveFilePath = Application.persistentDataPath + "/PlayerData.json";
         LoadGame();
-        gate.SetActive(false);
         enemyText.text = "x" + enemySpawn.transform.childCount;
         win.SetActive(false);
         gameObject.SetActive(true);
@@ -84,9 +83,17 @@ public class gameManager : MonoBehaviour
         }
     }
 
-    public void winGame()
+    public void winGame(Vector3 mid)
     {
-        win.SetActive(true);
+        if(player.transform.position != mid)
+        {
+            player.GetComponent<SimpleSampleCharacterControl>().ss.direction = mid;
+        }
+
+        //here, to go to mid, add a bool to the updates in the SimpleSampleCharacterControl and depending on the
+        //bool result, it will either move with the joystick or automatically come to the stomach.
+
+        //win.SetActive(true);
         joystick.SetActive(false);
         saveGame();
         Destroy(player);

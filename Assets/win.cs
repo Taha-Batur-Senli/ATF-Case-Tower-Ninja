@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class win : MonoBehaviour
 {
+    [SerializeField] Vector3 middle = new Vector3 (6f, -0.5000001f, 90f);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +22,7 @@ public class win : MonoBehaviour
     {
         if(collision.gameObject.GetComponent<SimpleSampleCharacterControl>())
         {
-            collision.gameObject.GetComponent<playerScript>().manager.winGame();
+            collision.gameObject.GetComponent<playerScript>().manager.winGame(Vector3.zero);
         }
     }
 }
