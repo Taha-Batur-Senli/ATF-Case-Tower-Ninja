@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class exteriorHit : MonoBehaviour
 {
-    [SerializeField] public int speed = 4;
+    [SerializeField] public int speed = 50;
     bool chase = false;
 
     // Start is called before the first frame update
@@ -32,7 +32,6 @@ public class exteriorHit : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<SimpleSampleCharacterControl>())
         {
-            Debug.Log("s");
             transform.parent.transform.LookAt(collision.gameObject.transform.position);
             chase = true;
         }

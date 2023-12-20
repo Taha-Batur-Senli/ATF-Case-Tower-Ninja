@@ -61,73 +61,81 @@ public class enemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        scanTimer -= Time.deltaTime;
-        if (scanTimer < 0 && !over)
+        if(!over)
         {
-            scanTimer += scanInterval;
-            Scan();
-        }
-
-        if (returned)
-        {
-            StopCoroutine(Chase());
-            StopCoroutine(returnToRot());
-            if (cnt == 3)
+            scanTimer -= Time.deltaTime;
+            if (scanTimer < 0 && !over)
             {
-                cnt++;
-                ss++;
+                scanTimer += scanInterval;
+                Scan();
             }
 
-            if (cnt < 3 && cnt >= 0)
+            if (returned)
             {
-                StartCoroutine(Look());
+                StopCoroutine(Chase());
+                StopCoroutine(returnToRot());
+                if (cnt == 3)
+                {
+                    cnt++;
+                    ss++;
+                }
+
+                if (cnt < 3 && cnt >= 0)
+                {
+                    StartCoroutine(Look());
+                }
+                else
+                {
+                    StartCoroutine(turn());
+                }
+
+                if (add && cnt < 3)
+                {
+                    add = false;
+                    cnt++;
+                }
             }
             else
             {
-                StartCoroutine(turn());
-            }
-
-            if (add && cnt < 3)
-            {
+                StopCoroutine(Look());
+                StopCoroutine(turn());
+                left = false;
+                right = false;
+                cnt = -1;
                 add = false;
-                cnt++;
+                ss = 0;
+
+                if (over)
+                {
+                    gun.Stop();
+                }
+
+                if (seenApriori)
+                {
+                    StartCoroutine(Chase());
+                }
+
+                if (back && gameObject.transform.position == ogPos)
+                {
+                    back = false;
+                    StartCoroutine(returnToRot());
+                }
+
+                if (back)
+                {
+                    var lookPos = ogPos - transform.position;
+                    lookPos.y = 0;
+                    var rotation = Quaternion.LookRotation(lookPos);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime);
+
+                    transform.position = Vector3.MoveTowards(transform.position, ogPos, returnSpeed * Time.deltaTime);
+                }
             }
         }
         else
         {
-            StopCoroutine(Look());
-            StopCoroutine(turn());
-            left = false;
-            right = false;
-            cnt = -1;
-            add = false;
-            ss = 0;
-
-            if (over)
-            {
-                gun.Stop();
-            }
-
-            if (seenApriori)
-            {
-                StartCoroutine(Chase());
-            }
-
-            if (back && gameObject.transform.position == ogPos)
-            {
-                back = false;
-                StartCoroutine(returnToRot());
-            }
-
-            if (back)
-            {
-                var lookPos = ogPos - transform.position;
-                lookPos.y = 0;
-                var rotation = Quaternion.LookRotation(lookPos);
-                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime);
-
-                transform.position = Vector3.MoveTowards(transform.position, ogPos, returnSpeed * Time.deltaTime);
-            }
+            StopAllCoroutines();
+            gun.Stop();
         }
     }
 

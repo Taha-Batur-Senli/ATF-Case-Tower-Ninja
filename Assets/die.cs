@@ -9,7 +9,7 @@ public class die : MonoBehaviour
 
         if (collision.gameObject.GetComponent<playerScript>())
         {
-            collision.gameObject.GetComponent<playerScript>().decreaseEnemyCount();
+            collision.gameObject.GetComponent<playerScript>().manager.decreaseEnemyCount();
             Destroy(gameObject.transform.parent.gameObject);
         }
     }

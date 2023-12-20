@@ -16,9 +16,9 @@ public class goldScript : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
-        if(collision.gameObject.GetComponent<SimpleSampleCharacterControl>())
+        if (collision.gameObject.GetComponent<SimpleSampleCharacterControl>())
         {
             collision.gameObject.GetComponent<playerScript>().manager.incrementGold();
             Destroy(gameObject);

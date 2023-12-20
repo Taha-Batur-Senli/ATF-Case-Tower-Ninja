@@ -5,6 +5,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
+using System.IO;
+public class PlayerData
+{
+    public int gold;
+}
 
 public class gameManager : MonoBehaviour
 {
@@ -14,13 +19,20 @@ public class gameManager : MonoBehaviour
     [SerializeField] GameObject over;
     [SerializeField] GameObject win;
     [SerializeField] GameObject joystick;
+    [SerializeField] GameObject gate;
     [SerializeField] public GameObject enemySpawn;
     [SerializeField] public TextMeshProUGUI enemyText;
     [SerializeField] public TextMeshProUGUI goldText;
+    string saveFilePath;
+    PlayerData playerData;
 
     // Start is called before the first frame update
     void Start()
     {
+        playerData = new PlayerData();
+        saveFilePath = Application.persistentDataPath + "/PlayerData.json";
+        LoadGame();
+        gate.SetActive(false);
         enemyText.text = "x" + enemySpawn.transform.childCount;
         win.SetActive(false);
         gameObject.SetActive(true);
@@ -34,20 +46,56 @@ public class gameManager : MonoBehaviour
         player.GetComponent<playerScript>().manager = this;
     }
 
+    public void LoadGame()
+    {
+        if (File.Exists(saveFilePath))
+        {
+            string loadPlayerData = File.ReadAllText(saveFilePath);
+            playerData = JsonUtility.FromJson<PlayerData>(loadPlayerData);
+            goldText.text = playerData.gold.ToString();
+        }
+        else
+        {
+            playerData.gold = 0;
+            string savePlayerData = JsonUtility.ToJson(playerData);
+            File.WriteAllText(saveFilePath, savePlayerData);
+        }
+    }
+
+    public void saveGame()
+    {
+        string savePlayerData = JsonUtility.ToJson(playerData);
+        File.WriteAllText(saveFilePath, savePlayerData);
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if(enemySpawn.transform.childCount == 0)
+        
+    }
+
+    public void decreaseEnemyCount()
+    {
+        enemyText.text = "x" + (enemySpawn.transform.childCount - 1);
+
+        if (enemySpawn.transform.childCount - 1 == 0)
         {
-            win.SetActive(true);
-            joystick.SetActive(false);
-            player.GetComponent<SimpleSampleCharacterControl>().ss.direction = Vector3.zero;
+            gate.SetActive(true);
         }
+    }
+
+    public void winGame()
+    {
+        win.SetActive(true);
+        joystick.SetActive(false);
+        saveGame();
+        Destroy(player);
     }
 
     public void incrementGold()
     {
         goldText.text = (int.Parse(goldText.text) + 1).ToString();
+        playerData.gold = int.Parse(goldText.text);
     }
 
     public void restart()

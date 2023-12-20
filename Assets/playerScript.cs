@@ -31,8 +31,4 @@ public class playerScript : MonoBehaviour
         }
     }
 
-    public void decreaseEnemyCount()
-    {
-        manager.enemyText.text = "x" + (manager.enemySpawn.transform.childCount - 1);
-    }
 }
