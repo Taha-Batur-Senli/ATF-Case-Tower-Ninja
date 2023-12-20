@@ -38,6 +38,9 @@ public class bullet : MonoBehaviour
             other.GetComponent<playerScript>().reduceHealth();
         }
 
-        Destroy(gameObject);
+        if(!other.GetComponent<exteriorHit>() && !other.GetComponent<goldScript>())
+        {
+            Destroy(gameObject);
+        }
     }
 }
