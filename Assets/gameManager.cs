@@ -16,6 +16,7 @@ public class gameManager : MonoBehaviour
     [SerializeField] GameObject joystick;
     [SerializeField] public GameObject enemySpawn;
     [SerializeField] public TextMeshProUGUI enemyText;
+    [SerializeField] public TextMeshProUGUI goldText;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +43,11 @@ public class gameManager : MonoBehaviour
             joystick.SetActive(false);
             player.GetComponent<SimpleSampleCharacterControl>().ss.direction = Vector3.zero;
         }
+    }
+
+    public void incrementGold()
+    {
+        goldText.text = (int.Parse(goldText.text) + 1).ToString();
     }
 
     public void restart()
