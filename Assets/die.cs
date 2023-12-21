@@ -10,6 +10,13 @@ public class die : MonoBehaviour
         if (collision.gameObject.GetComponent<playerScript>())
         {
             collision.gameObject.GetComponent<playerScript>().manager.decreaseEnemyCount();
+            
+            if(!collision.gameObject.GetComponent<playerScript>().hasKey && gameObject.transform.parent.GetComponent<enemyScript>() && gameObject.transform.parent.GetComponent<enemyScript>().hasKey)
+            {
+                collision.gameObject.GetComponent<playerScript>().hasKey = true;
+                collision.gameObject.GetComponent<playerScript>().showKey();
+            }
+
             Destroy(gameObject.transform.parent.gameObject);
         }
     }

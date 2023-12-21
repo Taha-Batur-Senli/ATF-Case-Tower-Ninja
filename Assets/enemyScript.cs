@@ -11,6 +11,8 @@ using static UnityEngine.GraphicsBuffer;
 //[ExecuteInEditMode]
 public class enemyScript : MonoBehaviour
 {
+    [SerializeField] public bool hasKey;
+    [SerializeField] public GameObject key;
     [SerializeField] ParticleSystem gun;
     [SerializeField] GameObject bullet;
     [SerializeField] VisionCone cone;
@@ -51,6 +53,15 @@ public class enemyScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(hasKey)
+        {
+            key.SetActive(true);
+        }
+        else
+        {
+            key.SetActive(false);
+        }
+
         textUI.text = "";
         ogPos = gameObject.transform.position;
         ogRot = gameObject.transform.rotation.eulerAngles;
