@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class playerScript : MonoBehaviour
 {
+    public bool hasKey = false;
+    [SerializeField] public GameObject key;
     [SerializeField] public GameObject healthBar;
     [SerializeField] public GameObject healthFull;
     [SerializeField] public gameManager manager;
@@ -13,6 +15,7 @@ public class playerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        key.SetActive(false);
         reduction = healthBar.GetComponent<RectTransform>().sizeDelta.x / howManyHitsCanITake;
     }
 
@@ -20,6 +23,16 @@ public class playerScript : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void showKey()
+    {
+        key.SetActive(true);
+    }
+
+    public void hideKey()
+    { 
+        key.SetActive(false); 
     }
 
     public void reduceHealth()
