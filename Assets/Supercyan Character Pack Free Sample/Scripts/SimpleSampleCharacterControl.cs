@@ -15,6 +15,7 @@ public class SimpleSampleCharacterControl : MonoBehaviour
         Direct
     }
 
+    public bool endgame = false;
     [SerializeField] private float m_moveSpeed = 15;
     [SerializeField] private float m_turnSpeed = 200;
     [SerializeField] private float m_jumpForce = 4;
@@ -176,6 +177,12 @@ public class SimpleSampleCharacterControl : MonoBehaviour
     {
         float v = ss.direction.z;
         float h = ss.direction.x;
+
+        if(endgame)
+        {
+            v = 1;
+            h = 0;
+        }
 
         Transform camera = Camera.main.transform;
 

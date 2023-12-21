@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class playerScript : MonoBehaviour
 {
-    [SerializeField] GameObject healthBar;
-    [SerializeField] GameObject healthFull;
+    [SerializeField] public GameObject healthBar;
+    [SerializeField] public GameObject healthFull;
     [SerializeField] public gameManager manager;
     public int howManyHitsCanITake = 4;
     float reduction;

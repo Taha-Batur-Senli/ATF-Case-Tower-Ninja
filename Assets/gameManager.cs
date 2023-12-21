@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System.Security.Cryptography;
 public class PlayerData
 {
     public int gold;
@@ -13,6 +14,8 @@ public class PlayerData
 
 public class gameManager : MonoBehaviour
 {
+    public Vector3 pos;
+    public bool winvec;
     [SerializeField] GameObject player;
     [SerializeField] GameObject cam;
     [SerializeField] GameObject plSpawn;
@@ -70,7 +73,10 @@ public class gameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(winvec)
+        {
+            StartCoroutine(winGame(pos));
+        }
     }
 
     public void decreaseEnemyCount()
@@ -83,20 +89,32 @@ public class gameManager : MonoBehaviour
         }
     }
 
-    public void winGame(Vector3 mid)
+    public IEnumerator winGame(Vector3 mid)
     {
-        if(player.transform.position != mid)
-        {
-            player.GetComponent<SimpleSampleCharacterControl>().ss.direction = mid;
-        }
+        joystick.SetActive(false);
 
+       yield return StartCoroutine(moveGate(mid));
         //here, to go to mid, add a bool to the updates in the SimpleSampleCharacterControl and depending on the
         //bool result, it will either move with the joystick or automatically come to the stomach.
 
-        //win.SetActive(true);
-        joystick.SetActive(false);
         saveGame();
-        Destroy(player);
+        player.GetComponent<SimpleSampleCharacterControl>().endgame = true;
+        player.GetComponent<JoystickPlayerExample>().end = true;
+        player.GetComponent<playerScript>().healthFull.SetActive(false);
+        player.GetComponent<playerScript>().healthBar.SetActive(false);
+
+        yield return new WaitForSeconds(3);
+        win.SetActive(true);
+        player.SetActive(false);
+    }
+
+    IEnumerator moveGate(Vector3 mids)
+    {
+        if(gate.transform.position.y != 14)
+        {
+            gate.transform.position += Vector3.up;
+            yield return new WaitForSeconds(1);
+        }
     }
 
     public void incrementGold()

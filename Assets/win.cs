@@ -22,7 +22,8 @@ public class win : MonoBehaviour
     {
         if(collision.gameObject.GetComponent<SimpleSampleCharacterControl>())
         {
-            collision.gameObject.GetComponent<playerScript>().manager.winGame(Vector3.zero);
+            collision.gameObject.GetComponent<playerScript>().manager.pos = Vector3.up;
+            collision.gameObject.GetComponent<playerScript>().manager.winvec = true;
         }
     }
 }
