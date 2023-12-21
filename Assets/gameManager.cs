@@ -94,8 +94,6 @@ public class gameManager : MonoBehaviour
         joystick.SetActive(false);
 
        yield return StartCoroutine(moveGate(mid));
-        //here, to go to mid, add a bool to the updates in the SimpleSampleCharacterControl and depending on the
-        //bool result, it will either move with the joystick or automatically come to the stomach.
 
         saveGame();
         player.GetComponent<SimpleSampleCharacterControl>().endgame = true;
